@@ -3,6 +3,27 @@ Implementation of the ideas proposed in the paper
 [Exploring Optimism and Pessimism in Twitter Using Deep Learning](https://www.aclweb.org/anthology/D18-1067/),
 (C. Caragea et al. 2018)
 
+## Description
+
+Analysis of the Optimism/Pessimism present in a tweet using _Deep Learning_ methods.
+We mainly use the __OPT__ dataset proposed in 
+[Finding Optimists and Pessimists on Twitter](https://www.aclweb.org/anthology/P16-2052/)
+(Ruan et al. 2016).
+We follow closely the methodolgy proposed in 
+[Exploring Optimism and Pessimism in Twitter Using Deep Learning](https://www.aclweb.org/anthology/D18-1067/),
+(C. Caragea et al. 2018).
+
+### Part 1:
+
+Analyze the __OPT__ dataset using Deep Learning models.
+
+### Part 2:
+
+Analyze the difference between sentiment and optimism.
+
+## Results
+
+To be added.
 
 ## Usage
 
