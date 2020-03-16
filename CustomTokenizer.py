@@ -15,7 +15,8 @@ class CustomTokenizer:
 #                                                len(x.split(" "))\
 #                                            , texts))
         self.tokenizer.fit_on_texts(texts)
-        print("Tokenizer fitted on %d texts.\n" %len(texts))
+        print("Tokenizer fitted on %s texts.\n" \
+            %(f'{len(texts):,}'))
         return self
 
     def texts_to_sequences(self, texts):

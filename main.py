@@ -50,6 +50,8 @@ if __name__ == '__main__':
     opt_tweets, opt_gold_labels = read_OPT_data(DATA_PATH)
     #Define tokenizer:
     custom_tokenizer    = CustomTokenizer()#.fit_on_texts(tweets)
+    MAX_SEQUENCE_LENGTH = None
+
 
     if PRE_TRAINING_ON_TSA:
         sent_tweets, sent_gold_labels = read_OPT_data(data_path=SENTIMENT_PATH\
@@ -57,19 +59,23 @@ if __name__ == '__main__':
                                            , label_column=SENTIMENT_LABEL)
         custom_tokenizer    = custom_tokenizer.fit_on_texts(opt_tweets\
                                                             + sent_tweets)
+
+        MAX_SEQUENCE_LENGTH = max(map(lambda x: len(x.split(" ")), opt_tweets)) + 1
         #Tokenize data using the tokenizer:
         sent_vectorized_tweets, sent_gold_labels = vectorize_data(\
                                                        sent_tweets\
                                                      , sent_gold_labels\
                                                      , custom_tokenizer\
-                                                     , MAX_SEQUENCE_LENGTH=40)
+                                                     , MAX_SEQUENCE_LENGTH=MAX_SEQUENCE_LENGTH)
+        sent_gold_labels = binarize_labels(sent_gold_labels, max_negative_value=0)
     else:
         custom_tokenizer    = custom_tokenizer.fit_on_texts(opt_tweets)
         #Tokenize data using the tokenizer:
 
     opt_vectorized_tweets, opt_gold_labels = vectorize_data(opt_tweets\
                                                  , opt_gold_labels\
-                                                 , custom_tokenizer)
+                                                 , custom_tokenizer\
+                                                 , MAX_SEQUENCE_LENGTH=MAX_SEQUENCE_LENGTH)
 
     #If we ignore tweets with annotation in (-1, 1):
     if SETTING_1M1:
@@ -104,6 +110,7 @@ if __name__ == '__main__':
 
     #Train model:
     training_history, model = train_model(model=model\
+                                          , model_name = MODEL_NAME\
                                           , x_train = x_train\
                                           , y_train = y_train\
                                           , x_dev   = x_dev\
