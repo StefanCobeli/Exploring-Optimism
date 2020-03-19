@@ -1,0 +1,23 @@
+[Misc]
+RANDOM_SEED         = 7
+
+[Paths]
+DATA_PATH           = ../data/optimism-twitter-data/tweets_annotation.csv
+#EMBEDDINGS_PATH     = ../embeddings/glove.840B.300d/glove.840B.300d.txt
+EMBEDDINGS_PATH     = ../embeddings/crawl-300d-2M-subword/crawl-300d-2M-subword.vec
+HISTORY_PATH        = ./histories/
+LOGGING_PATH        =
+#LOGGING_PATH        = ./logging/first_log
+MODELS_PATH         = ./models/
+SENTIMENT_PATH      = ../data/Sentiment-Analysis-Dataset/Sentiment Analysis Dataset.csv
+
+[Training]
+BATCH_SIZE          = 256
+MODEL_NAME          = GRUstack_model
+NUM_EPOCHS          = 30
+SETTING_1M1         = True
+
+[Sentiment]
+PRE_TRAINING_ON_TSA = False
+SENTIMENT_LABEL     = Sentiment
+SENTIMENT_TEXT      = SentimentText

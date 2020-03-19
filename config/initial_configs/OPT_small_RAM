@@ -1,7 +1,9 @@
+[Misc]
+RANDOM_SEED         = 11
+
 [Paths]
 DATA_PATH           = ../data/optimism-twitter-data/tweets_annotation.csv
-#EMBEDDINGS_PATH     = ../embeddings/glove.840B.300d/glove.840B.300d.txt
-EMBEDDINGS_PATH     = ../embeddings/crawl-300d-2M-subword/crawl-300d-2M-subword.vec
+EMBEDDINGS_PATH     = ../embeddings/glove.twitter.27B/glove.twitter.27B.25d.txt
 HISTORY_PATH        = ./histories/
 LOGGING_PATH        =
 #LOGGING_PATH        = ./logging/first_log
@@ -13,7 +15,7 @@ BATCH_SIZE          = 256
 MODEL_NAME          = BiLSTM_model
 #MODEL_NAME          = CNN_model
 #MODEL_NAME          = GRUstack_model
-NUM_EPOCHS          = 30
+NUM_EPOCHS          = 1
 SETTING_1M1         = True
 
 [Sentiment]

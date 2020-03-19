@@ -1,6 +1,8 @@
 import argparse
 import configparser
-import sys
+from set_project_seed import *
+
+
 # sys.path.insert(0, './code/')
 # sys.path.insert(0, './config/')
 
@@ -9,6 +11,8 @@ from data_preparation import *
 from Embedder         import *
 from models           import *
 from training         import *
+
+from shutil           import copyfile
 
 
 if __name__ == '__main__':
@@ -21,6 +25,8 @@ if __name__ == '__main__':
     config_path = args.config_path
     config      = configparser.ConfigParser()
     config.read(config_path)#'./code/config/OPT.ini')
+
+    RANDOM_SEED         = config.getint("Misc", "RANDOM_SEED")
 
     BATCH_SIZE          = config.getint('Training', 'BATCH_SIZE')
     NUM_EPOCHS          = config.getint('Training', 'NUM_EPOCHS')
@@ -38,6 +44,11 @@ if __name__ == '__main__':
     PRE_TRAINING_ON_TSA = config.getboolean('Sentiment', 'PRE_TRAINING_ON_TSA')
     SENTIMENT_LABEL     = config.get('Sentiment', 'SENTIMENT_LABEL')
     SENTIMENT_TEXT      = config.get('Sentiment', 'SENTIMENT_TEXT')
+
+    #Set random seed for the experiment:
+    np.random.seed(RANDOM_SEED)
+    # random.seed(RANDOM_SEED)
+    print("Random seed set to %d." %RANDOM_SEED)
 
     #Project pipeline:
     if LOGGING_PATH != "":
@@ -96,7 +107,7 @@ if __name__ == '__main__':
         #Train/Dev/Test split:
         x_train, y_train, x_dev, y_dev, x_test, y_test = \
             train_dev_test_split(opt_vectorized_tweets\
-                                 , opt_gold_labels)
+                                 , opt_gold_labels, R_SEED= 7)
 
     #Load pretrained Embeddings:
     embedder = Embedder(EMBEDDINGS_PATH)
@@ -105,7 +116,7 @@ if __name__ == '__main__':
 
     #model architecture:
     model_builder = get_model_builder(MODEL_NAME)
-    model         = model_builder(embedding_layer)
+    model         = model_builder(embedding_layer, RANDOM_SEED)
 
 
     #Train model:
@@ -119,5 +130,34 @@ if __name__ == '__main__':
                                           , batch_size  = BATCH_SIZE\
                                           , models_path = MODELS_PATH\
                                           , histories_path=HISTORY_PATH)
+    ##########################################
+    #Save trained model & Training history:
+    if "val_acc" not in training_history.history:
+        val_acc    = "valAcc%.3f"%(training_history.history["val_accuracy"][-1])
+        # training_history.history["val_acc"] = training_history.history["val_accuracy"]
+    else:
+        val_acc    = "valAcc%.3f"%(training_history.history["val_acc"][-1])
 
+
+    time_stamp = strftime("%H%M%S_%Y%m%d", gmtime())
+    time_stamp = "_".join((config_path.split("/")[-1], val_acc, time_stamp))
+
+    #Save configuration file:
+    config_hist = HISTORY_PATH + "config_%s" %time_stamp
+    copyfile(config_path, config_hist)
+    print("Configurations saved in %s." \
+            %(config_hist))
+
+    #Save training history dictionary:
+    training_history_fn = HISTORY_PATH + ("history_%s.csv" %time_stamp)
+    pd.DataFrame(training_history.history)\
+        .to_csv(training_history_fn)
+    print("Training history saved in %s." \
+            %(training_history_fn))
+
+    #Save trained model:
+    trained_model_fn = MODELS_PATH + "trained_model_%s.h5" %time_stamp
+    model.save(trained_model_fn)
+    print("Trained model saved in %s." \
+                %(trained_model_fn))
     # return training_history, model

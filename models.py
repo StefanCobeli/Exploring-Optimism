@@ -1,6 +1,8 @@
 from keras.layers import Concatenate, Bidirectional, Conv1D, Dense, Dropout
 from keras.layers import Flatten, Input, GRU, LSTM, MaxPooling1D
 from keras.models import Model
+
+import numpy as np
 # from keras.initializers import Constant
 
 def get_model_builder(model_name="GRUstack_model"):
@@ -13,7 +15,8 @@ def get_model_builder(model_name="GRUstack_model"):
 
 
 
-def BiLSTM_model(embedding_layer):
+def BiLSTM_model(embedding_layer, RANDOM_SEED):
+    np.random.seed(RANDOM_SEED)
     print('Building BiLSTM model...')
 
     # train a Bidirectional LSTM:
@@ -32,7 +35,8 @@ def BiLSTM_model(embedding_layer):
     model = Model([sequence_input], preds)
     return model
 
-def CNN_model(embedding_layer):
+def CNN_model(embedding_layer, RANDOM_SEED):
+    np.random.seed(RANDOM_SEED)
     print('Building CNN model...')
 
     # train a Bidirectional LSTM:
@@ -55,7 +59,8 @@ def CNN_model(embedding_layer):
     return model
 
 
-def GRUstack_model(embedding_layer):
+def GRUstack_model(embedding_layer, RANDOM_SEED):
+    np.random.seed(RANDOM_SEED)
     print('Building GRUstack model...')
 
     # train a 1D convnet with global maxpooling
