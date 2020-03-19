@@ -24,7 +24,7 @@ class Embedder:
 #         'glove.6B.%dd.txt'
         # with open(os.path.join(path_to_emb\
         # , "glove.twitter.27B.%dd.txt" %self.embeddings_size)
-        with open(path_to_emb) as f:
+        with open(path_to_emb, encoding="utf8") as f:
             for line in f:
                 word, coefs = line.split(maxsplit=1)
                 coefs = np.fromstring(coefs, 'f', sep=' ')
