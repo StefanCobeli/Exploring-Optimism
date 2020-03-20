@@ -156,8 +156,8 @@ if __name__ == '__main__':
             %(training_history_fn))
 
     #Save trained model:
-    trained_model_fn = MODELS_PATH + "trained_model_%s.h5" %time_stamp
-    model.save(trained_model_fn)
-    print("Trained model saved in %s." \
-                %(trained_model_fn))
+    # trained_model_fn = MODELS_PATH + "trained_model_%s.h5" %time_stamp
+    # model.save(trained_model_fn)
+    # print("Trained model saved in %s." \
+    #             %(trained_model_fn))
     # return training_history, model
