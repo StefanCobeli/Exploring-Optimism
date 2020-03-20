@@ -62,6 +62,8 @@ class Embedder:
                 continue
             embedding_vector = self.embeddings_index.get(word)
             if embedding_vector is not None:
+                if embedding_vector.shape[0] != self.embeddings_size:
+                    continue
                 # words not found in embedding index will be all-zeros.
                 embedding_matrix[i] = embedding_vector
 
