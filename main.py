@@ -44,6 +44,7 @@ if __name__ == '__main__':
     PRE_TRAINING_ON_TSA = config.getboolean('Sentiment', 'PRE_TRAINING_ON_TSA')
     SENTIMENT_LABEL     = config.get('Sentiment', 'SENTIMENT_LABEL')
     SENTIMENT_TEXT      = config.get('Sentiment', 'SENTIMENT_TEXT')
+    TRIM                = config.getboolean('Sentiment', 'TRIM')
 
     #Set random seed for the experiment:
     np.random.seed(RANDOM_SEED)
@@ -71,7 +72,10 @@ if __name__ == '__main__':
         custom_tokenizer    = custom_tokenizer.fit_on_texts(opt_tweets\
                                                             + sent_tweets)
 
-        MAX_SEQUENCE_LENGTH = max(map(lambda x: len(x.split(" ")), opt_tweets)) + 1
+        if TRIM:
+            MAX_SEQUENCE_LENGTH = max(map(lambda x: len(x.split(" ")), opt_tweets))
+        else:
+            MAX_SEQUENCE_LENGTH = max(map(lambda x: len(x.split(" ")), sent_tweets))
         #Tokenize data using the tokenizer:
         sent_vectorized_tweets, sent_gold_labels = vectorize_data(\
                                                        sent_tweets\
@@ -107,7 +111,7 @@ if __name__ == '__main__':
         #Train/Dev/Test split:
         x_train, y_train, x_dev, y_dev, x_test, y_test = \
             train_dev_test_split(opt_vectorized_tweets\
-                                 , opt_gold_labels, R_SEED= 7)
+                                 , opt_gold_labels, R_SEED=RANDOM_SEED)
 
     #Load pretrained Embeddings:
     embedder = Embedder(EMBEDDINGS_PATH)

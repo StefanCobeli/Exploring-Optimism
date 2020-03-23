@@ -10,8 +10,9 @@ def train_model(model, model_name, x_train, y_train\
 
     # model.save(models_path + 'untrained_model.h5')
 
+    #'adam', "adadelta", 'adagrad', "adamax", 'rmsprop', "nadam"
     model.compile(loss='binary_crossentropy', #"mean_squared_logarithmic_error", #'binary_crossentropy',
-              optimizer='adam',#'adagrad',#'rmsprop',
+              optimizer='adamax',
               metrics=['accuracy'])
 
     print("Training %s..." %model_name)

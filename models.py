@@ -45,6 +45,8 @@ def CNN_model(embedding_layer, RANDOM_SEED):
     embedded_sequences = embedding_layer(sequence_input)
     tweet_branch = Conv1D(256, 3, activation='relu')(embedded_sequences)
     tweet_branch = MaxPooling1D(3)(tweet_branch)
+    # tweet_branch = Conv1D(128, 3, activation='relu')(embedded_sequences)
+    # tweet_branch = MaxPooling1D(3)(tweet_branch)
     # tweet_branch = Conv1D(128, 5, activation='relu')(tweet_branch)
     # tweet_branch = MaxPooling1D(5)(tweet_branch)
     tweet_branch = Flatten()(tweet_branch)
