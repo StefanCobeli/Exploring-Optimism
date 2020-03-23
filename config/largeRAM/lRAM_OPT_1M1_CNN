@@ -14,7 +14,7 @@ SENTIMENT_PATH      = ../data/Sentiment-Analysis-Dataset/Sentiment Analysis Data
 [Training]
 BATCH_SIZE          = 256
 MODEL_NAME          = CNN_model
-NUM_EPOCHS          = 30
+NUM_EPOCHS          = 15
 SETTING_1M1         = True
 
 [Sentiment]
