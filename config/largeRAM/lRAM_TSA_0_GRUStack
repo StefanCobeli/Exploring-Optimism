@@ -8,7 +8,7 @@ EMBEDDINGS_PATH     = ../embeddings/glove.840B.300d/glove.840B.300d.txt
 HISTORY_PATH        = ./histories/largeRAM/
 LOGGING_PATH        =
 #LOGGING_PATH        = ./logging/first_log
-MODELS_PATH         = ./models/largeRAM
+MODELS_PATH         = ./models/largeRAM/
 SENTIMENT_PATH      = ../data/Sentiment-Analysis-Dataset/Sentiment Analysis Dataset.csv
 
 [Training]
