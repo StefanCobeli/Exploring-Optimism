@@ -1,0 +1,24 @@
+[Misc]
+RANDOM_SEED         = 7
+
+[Paths]
+DATA_PATH           = ../data/optimism-twitter-data/tweets_annotation.csv
+EMBEDDINGS_PATH     = ../embeddings/glove.840B.300d/glove.840B.300d.txt
+#EMBEDDINGS_PATH     = ../embeddings/crawl-300d-2M-subword/crawl-300d-2M-subword.vec
+HISTORY_PATH        = ./histories/largeRAM/
+LOGGING_PATH        =
+#LOGGING_PATH        = ./logging/first_log
+MODELS_PATH         = ./models/largeRAM/
+SENTIMENT_PATH      = ../data/Sentiment-Analysis-Dataset/Sentiment Analysis Dataset.csv
+
+[Training]
+BATCH_SIZE          = 4096
+MODEL_NAME          = CNN_model
+NUM_EPOCHS          = 10
+SETTING_1M1         = False
+
+[Sentiment]
+PRE_TRAINING_ON_TSA = True
+SENTIMENT_LABEL     = Sentiment
+SENTIMENT_TEXT      = SentimentText
+TRIM                = True
