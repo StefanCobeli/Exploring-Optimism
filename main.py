@@ -142,9 +142,9 @@ if __name__ == '__main__':
     else:
         val_acc    = "valAcc%.3f"%(training_history.history["val_acc"][-1])
 
-
+    emb_name   = "GloVe" if "glove" in EMBEDDINGS_PATH else "FastText"
     time_stamp = strftime("%H%M%S_%Y%m%d", gmtime())
-    time_stamp = "_".join((config_path.split("/")[-1], val_acc, time_stamp))
+    time_stamp = "_".join((config_path.split("/")[-1], emb_name, val_acc, time_stamp))
 
     #Save configuration file:
     config_hist = HISTORY_PATH + "config_%s" %time_stamp

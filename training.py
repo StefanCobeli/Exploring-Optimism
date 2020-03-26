@@ -10,7 +10,7 @@ def train_model(model, model_name, x_train, y_train\
 
     # model.save(models_path + 'untrained_model.h5')
 
-    #'adam', "adadelta", 'adagrad', "adamax", 'rmsprop', "nadam"
+    #'adam', "adadelta", 'adagrad', "adamax", 'rmsprop', "nadam", "sgd"
     model.compile(loss='binary_crossentropy', #"mean_squared_logarithmic_error", #'binary_crossentropy',
               optimizer='adamax',
               metrics=['accuracy'])
