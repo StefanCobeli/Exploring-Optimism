@@ -57,6 +57,7 @@ Run minimal project (train a Deep Learning model on the __OPT__ dataset):
   - Large training batch size (>2048) seem to stuck training performance in local minima;     
   - After 1 training epoch on __TSA__, accuracy on __OPT__ is ~ 0.74;
   - Freezing pre-trained embedding weights provide more stable accuracy on validation set (prevent overfitting on sentiment);
+  - __TSA__ tweets can be trimmed from length ~100 to ~30, without loss in accuracy; 
   - Need to investigate how to perform knowledge transfer between TSA and OPT.
   Training only the final MLPs of the architecture (freezing the others, embedding & encoding) seems to work better.   
 
