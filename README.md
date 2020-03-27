@@ -45,9 +45,9 @@ Run minimal project (train a Deep Learning model on the __OPT__ dataset):
  - Trained models on __OPT__ on Tweet Level on both 0 & 1/-1 settings (_Section 3.1_);
  - Used BiLSTM, GRUStack & CNN as encoders.
  - Used multiple types of static word embedding:
-  - [GloVe](https://nlp.stanford.edu/projects/glove/)
+   - [GloVe](https://nlp.stanford.edu/projects/glove/)
  (Common Crawl 840B & Twitter 27B);
-  - [FastText](https://fasttext.cc/docs/en/english-vectors.html).
+   - [FastText](https://fasttext.cc/docs/en/english-vectors.html).
  - Trained on __TSA__ and tested on __OPT__ (_Section 3.2_);
  - First try on finetunig __TSA__ trained model on __OPT__.  
 
