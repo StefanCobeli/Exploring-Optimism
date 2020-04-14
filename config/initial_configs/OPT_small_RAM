@@ -22,3 +22,4 @@ SETTING_1M1         = True
 PRE_TRAINING_ON_TSA = False
 SENTIMENT_LABEL     = Sentiment
 SENTIMENT_TEXT      = SentimentText
+TRIM                = True
