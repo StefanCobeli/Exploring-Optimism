@@ -1,5 +1,7 @@
+#Added by Stefan Cobeli, specific for Optimism project:
 #Don't upload large keras models:
 models/*
+notebooks/models/*
 
 #.gitignore source:
 #https://github.com/github/gitignore/blob/master/Python.gitignore
