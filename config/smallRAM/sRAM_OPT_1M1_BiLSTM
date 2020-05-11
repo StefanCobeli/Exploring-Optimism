@@ -13,7 +13,7 @@ SENTIMENT_PATH      = ../data/Sentiment-Analysis-Dataset/Sentiment Analysis Data
 [Training]
 BATCH_SIZE          = 16
 MODEL_NAME          = BiLSTM_model
-NUM_EPOCHS          = 10
+NUM_EPOCHS          = 15
 SETTING_1M1         = True
 
 [Sentiment]
