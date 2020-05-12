@@ -15,6 +15,7 @@ BATCH_SIZE          = 16
 MODEL_NAME          = BiLSTM_model
 NUM_EPOCHS          = 15
 SETTING_1M1         = True
+TRAINABLE_EMBEDDING = True
 
 [Sentiment]
 PRE_TRAINING_ON_TSA = False

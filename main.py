@@ -32,6 +32,7 @@ if __name__ == '__main__':
     NUM_EPOCHS          = config.getint('Training', 'NUM_EPOCHS')
     MODEL_NAME          = config.get('Training', 'MODEL_NAME')
     SETTING_1M1         = config.getboolean('Training', 'SETTING_1M1')
+    TRAINABLE_EMBEDDING = config.getboolean('Training', 'TRAINABLE_EMBEDDING')
 
     DATA_PATH           = config.get('Paths', 'DATA_PATH')
     EMBEDDINGS_PATH     = config.get('Paths', 'EMBEDDINGS_PATH')
@@ -116,7 +117,7 @@ if __name__ == '__main__':
     #Load pretrained Embeddings:
     embedder = Embedder(EMBEDDINGS_PATH)
     embedding_layer = embedder.build_embedding_layers(custom_tokenizer,\
-                                                     trainable=True)
+                                                     trainable=TRAINABLE_EMBEDDING)
 
     #model architecture:
     model_builder = get_model_builder(MODEL_NAME)
