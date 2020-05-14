@@ -1,0 +1,26 @@
+[Misc]
+RANDOM_SEED         = 11
+
+[Paths]
+DATA_PATH           = ../data/optimism-twitter-data/tweets_annotation.csv
+#EMBEDDINGS_PATH     = ../embeddings/glove.twitter.27B/glove.twitter.27B.25d.txt
+EMBEDDINGS_PATH     = ../embeddings/glove.840B.300d/glove.840B.300d.txt
+#EMBEDDINGS_PATH     = ../embeddings/crawl-300d-2M-subword/crawl-300d-2M-subword.vec
+HISTORY_PATH        = ./histories/smallRAM/
+LOGGING_PATH        =
+#LOGGING_PATH        = ./logging/first_log
+MODELS_PATH         = ./models/smallRAM/
+SENTIMENT_PATH      = ../data/Sentiment-Analysis-Dataset/Sentiment Analysis Dataset.csv
+
+[Training]
+BATCH_SIZE          = 16
+MODEL_NAME          = Transformer_model
+NUM_EPOCHS          = 15
+SETTING_1M1         = False
+TRAINABLE_EMBEDDING = True
+
+[Sentiment]
+PRE_TRAINING_ON_TSA = False
+SENTIMENT_LABEL     = Sentiment
+SENTIMENT_TEXT      = SentimentText
+TRIM                = False

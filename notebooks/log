@@ -1,0 +1,35 @@
+Processing text dataset:
+Found 7,475 texts.
+
+Tokenizer created!
+Tokenizer fitted on 7,475 texts.
+
+Vectorizing given data...
+The longest tweet/text has 34 words.
+Shape of data_sequences tensor: (7475, 35)
+Shape of label tensor: (7475,).
+
+Binarized labels!
+Splitted data into Train: 5981; Dev: 747; Test: 747.
+
+Indexing pre-trained word vectors...
+Using glove.twitter.27B.200d.txt:
+Found 1,193,514 pre-trained word vectors.
+The words will be embedded in 200-dimensional vectors.
+Embedding layer prepared.
+
+Random seed set to 11.
+Processing text dataset:
+Found 7,475 texts.
+
+Tokenizer created!
+Tokenizer fitted on 7,475 texts.
+
+Vectorizing given data...
+The longest tweet/text has 34 words.
+Shape of data_sequences tensor: (7475, 35)
+Shape of label tensor: (7475,).
+
+Binarized labels!
+Splitted data into Train: 5981; Dev: 747; Test: 747.
+

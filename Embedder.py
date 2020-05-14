@@ -1,5 +1,5 @@
-from keras.initializers import Constant
-from keras.layers       import Embedding
+from tensorflow.keras.initializers import Constant
+from tensorflow.keras.layers       import Embedding
 import numpy as np
 import os
 
@@ -69,6 +69,7 @@ class Embedder:
 
         # load pre-trained word embeddings into an Embedding layer
         # note that we set trainable = False so as to keep the embeddings fixed
+        # print(num_words)
         embedding_layer = Embedding(num_words,
                                     EMBEDDING_DIM,
                                     embeddings_initializer=Constant(embedding_matrix),

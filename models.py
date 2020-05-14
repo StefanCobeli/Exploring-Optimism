@@ -1,6 +1,7 @@
-from keras.layers import Concatenate, Bidirectional, Conv1D, Dense, Dropout
-from keras.layers import Flatten, Input, GRU, LSTM, MaxPooling1D
-from keras.models import Model
+from tensorflow.keras.layers import Concatenate, Bidirectional, Conv1D, Dense, Dropout
+from tensorflow.keras.layers import Flatten, Input, GRU, LSTM, MaxPooling1D, GlobalAveragePooling1D
+from tensorflow.keras.models import Model
+from text_classification_with_transformer import *
 
 import numpy as np
 # from keras.initializers import Constant
@@ -12,8 +13,43 @@ def get_model_builder(model_name="GRUstack_model"):
         return CNN_model
     if model_name == "GRUstack_model":
         return GRUstack_model
+    if model_name == "Transformer_model":
+        return Transformer_model
 
+def Transformer_model(embedding_layer, RANDOM_SEED):
+    np.random.seed(RANDOM_SEED)
+    print('Building Transformer model...')
+    num_heads = 5  # Number of attention heads
+    ff_dim = 32  # Hidden layer size in feed forward network inside transformer
 
+    # train a Bidirectional LSTM:
+    sequence_input = Input(shape=(embedding_layer.input_length, )\
+                           , dtype='int32')
+    embedded_sequences = embedding_layer(sequence_input)
+    embed_dim  = embedded_sequences.shape[-1]
+    maxlen     = embedding_layer.get_config()["input_length"]
+    vocab_size = embedding_layer.get_config()["input_dim"]
+
+    # print(embedded_sequences.shape[-1])
+    # embedded_sequences = TokenAndPositionEmbedding(maxlen, vocab_size, embed_dim)(embedded_sequences)
+
+    transformer_block = TransformerBlock(embed_dim, num_heads, ff_dim)
+    x = transformer_block(embedded_sequences)#x)
+    # x = GlobalAveragePooling1D()(x)
+
+    tweet_branch = x
+    tweet_branch = Flatten()(tweet_branch)
+    # tweet_branch = Bidirectional(LSTM(256))(embedded_sequences)
+
+    dense_branch = Dense(300, activation='relu')(tweet_branch)
+    dense_branch = Dropout(rate = .2)(dense_branch)
+    dense_branch = Dense(200, activation='relu')(dense_branch)
+    dense_branch = Dense(100, activation='relu')(dense_branch)
+    dense_branch = Dropout(rate = .1)(dense_branch)
+    preds = Dense(2, activation='softmax')(dense_branch)
+
+    model = Model([sequence_input], preds)
+    return model
 
 def BiLSTM_model(embedding_layer, RANDOM_SEED):
     np.random.seed(RANDOM_SEED)
