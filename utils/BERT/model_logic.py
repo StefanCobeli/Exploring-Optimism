@@ -21,19 +21,19 @@ def change_model_top_layer(model, model_name):
         Change models' top layer based on its architecture.
         Returns the model with only 2 output units.
     """
-    if model_name='albert-base-v2':
+    if model_name=='albert-base-v2':
         model.classifier = torch.nn.Linear(in_features=768\
                                         , out_features=2)
-    if model_name='bert-base-uncased':
+    if model_name=='bert-base-uncased':
         model.classifier = torch.nn.Linear(in_features=768\
                                         , out_features=2)
-    if model_name='bert-large-uncased':
+    if model_name=='bert-large-uncased':
         model.classifier = torch.nn.Linear(in_features=1024\
                                         , out_features=2)
-    if model_name="roberta-base":
+    if model_name=="roberta-base":
         model.out_proj = torch.nn.Linear(in_features=768\
                                       , out_features=2)
-    if model_name="xlnet-base-cased":
+    if model_name=="xlnet-base-cased":
         model.logits_proj = torch.nn.Linear(in_features=768\
                                          , out_features=2)
     return model
@@ -76,6 +76,9 @@ def pick_model(model_name, num_labels):
         )
 
     print(f'Loaded {model_name} model.')
+    if torch.cuda.is_available():
+        model.cuda()
+        
     return model
 
 
@@ -104,7 +107,10 @@ def retrieve_logits(model, opt_df          \
                     , dataloader, input_ids\
                     , sentences, labels    \
                     , model_name, batch_size  \
-                    , opt_data_path, pre_training_name=None):
+                    , opt_data_path, pre_training_name=None\
+                    , iteration="1of1"
+                    , data_type="train"
+                    , setting="set0"):
     '''
         Return data_frame with additional 2 columns according to
         the 2 logits predicted by the model for each entry.
@@ -137,7 +143,7 @@ def retrieve_logits(model, opt_df          \
                attention_mask=b_input_mask)[0]
             loss   = cse_loss(logits, b_labels)
         # Accumulate the validation loss.
-        total_loss += loss.item()* (len(label_ids)/batch_size)
+        total_loss += loss.item()* (len(logits)/batch_size)
         # Move logits and labels to CPU
         logits = logits.detach().cpu().numpy()
         label_ids = b_labels.to('cpu').numpy()
@@ -151,11 +157,11 @@ def retrieve_logits(model, opt_df          \
             assertion_tweets[original_index]  = sentences[original_index]
         # Calculate the accuracy for this batch of test sentences, and
         # accumulate it over all batches.
-        total_accuracy += flat_accuracy(logits, label_ids) * (len(label_ids)/batch_size)
+        total_accuracy += flat_accuracy(logits, label_ids) * (len(logits)/batch_size)
 
     # Report the final accuracy for this validation run.
     avg_accuracy = total_accuracy / len(dataloader)
-    print("\n Accuracy of model {0}: {1:.4f}".format(model_name, avg_accuracy))
+    print("\n Accuracy of model {0} on {1}: {2:.4f}".format(model_name, data_type, avg_accuracy))
     # Calculate the average loss over all of the batches.
     avg_loss = total_loss / len(dataloader)
     # Measure how long the validation run took.
@@ -171,7 +177,7 @@ def retrieve_logits(model, opt_df          \
 
     #Save new dataframe:
     data_name = f"OPT_{pre_training_name+'_' if pre_training_name else ''}"
-    save_path = f"{opt_data_path}/Logits_{data_name}{model_name}_Acc:{avg_accuracy}.csv"
+    save_path = f"{opt_data_path}Logits/Logits_{data_name}{model_name}_{setting}_it:{iteration}_{data_type}_Acc:{avg_accuracy}.csv"
     opt_df.to_csv(save_path)
 
     return opt_df
@@ -184,8 +190,10 @@ def train_model(model, optimizer\
                 , num_epochs, random_seed\
                 , model_name, pre_training_name=None\
                 , pre_training=False  \
+                , iteration=""
                 , histories_path="." \
-                , weight_decay=False):
+                , weight_decay=False
+                , setting="set0"):
     """
         Train the the given `model` using `optimizer`, `batch_size`
         and the provided Dataloaders, for `num_epochs` with `random_seed`.
@@ -209,7 +217,7 @@ def train_model(model, optimizer\
     np.random.seed(random_seed)
     torch.manual_seed(random_seed)
     torch.cuda.manual_seed_all(random_seed)
-
+    
     if weight_decay:
         # Create the learning rate scheduler.
         scheduler = transformers.get_linear_schedule_with_warmup(optimizer,
@@ -225,7 +233,6 @@ def train_model(model, optimizer\
     total_t0 = time.time()
     # Tell PyTorch to use the GPU.
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-
 
     # For each epoch...
     for epoch_i in (range(num_epochs)):
@@ -465,7 +472,7 @@ def train_model(model, optimizer\
     val_acc   = df_stats["Valid. Accur."].values[-1]#.max()
     data_name = pre_training_name + "_" if pre_training \
             else f"OPT_{pre_training_name+'_' if pre_training_name else ''}"
-    hist_fn = f"{histories_path}/{data_name}{model_name}_ValAcc:{val_acc}.csv"
+    hist_fn = f"{histories_path}/{data_name}{model_name}_{setting}_it:{iteration}_ValAcc:{val_acc}.csv"
     df_stats.to_csv(hist_fn)
     print(f"\nTraining stats saved at: {hist_fn}.")
 
