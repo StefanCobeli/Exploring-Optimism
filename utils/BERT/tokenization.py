@@ -70,6 +70,8 @@ def retrieve_data_encodings(sentences, tokenizer, max_len=64):
         # And its attention mask (simply differentiates padding from non-padding).
         attention_masks.append(encoded_dict['attention_mask'])
 
+    # input_ids       = torch.array(input_ids)
+    # attention_masks = torch.array(attention_masks)
     return torch.cat(input_ids, dim=0), torch.cat(attention_masks, dim=0)
 
 
@@ -82,6 +84,7 @@ def retrieve_dataloaders(ids_train, masks_train, labels_train \
         Returns:
         dataloader_train, dataloader_test, dataloader_validation
     """
+
     # Combine the training inputs into a TensorDataset.
     dataset_train    = TensorDataset(ids_train, masks_train, labels_train)
     dataloader_train = DataLoader(

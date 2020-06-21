@@ -59,17 +59,17 @@ def read_pre_training(emo_path=None, hate_path=None\
                               , names=["Tweet", "Emotion"])
         emonet_df["ELabel"] = emonet_df.Emotion.astype('category').cat.codes
         sentences = emonet_df.Tweet.values
-        labels    = emonet_df.ELabel.values.astype(int)
+        labels    = torch.tensor(emonet_df.ELabel.values.astype(int))
         print("Pre-Training on EmoNet, data ready.")
     if hate_path:
         hate_df     = pd.read_csv(hate_path\
                       , names=["ID", "Tweet", "Label"])
         hate_df["HLabel"] = hate_df.Label.astype('category').cat.codes
         sentences         = hate_df.Tweet.values
-        labels            = hate_df.HLabel.values.astype(int)
+        labels            = torch.tensor(hate_df.HLabel.values.astype(int))
         print("Pre-Training on Hate, data ready.")
     if opt1M1_path:
-        opt_df_train          = pd.read_csv(opt1M1_path + "optimism_set0_train.csv")
+        opt_df_train          = pd.read_csv(opt1M1_path)
         opt_df_train          = opt_df_train[np.logical_or(opt_df_train.AverageAnnotation<=-1\
                                                      , opt_df_train.AverageAnnotation>=1)]
         sentences = opt_df_train.Tweet.values
@@ -80,7 +80,7 @@ def read_pre_training(emo_path=None, hate_path=None\
         sent_df   = pd.read_csv(sent_path\
                                 , error_bad_lines=False)
         sentences = sent_df.SentimentText.values
-        labels    = sent_df.Sentiment.values.astype(int)
+        labels    = torch.tensor(sent_df.Sentiment.values.astype(int))
         print("Pre-Training on Sentiment, data ready.")
     return sentences, labels
 
