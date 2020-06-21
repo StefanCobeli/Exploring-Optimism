@@ -177,7 +177,7 @@ def retrieve_logits(model, opt_df          \
 
     #Save new dataframe:
     data_name = f"OPT_{pre_training_name+'_' if pre_training_name else ''}"
-    save_path = f"{opt_data_path}Logits/Logits_{data_name}{model_name}_{setting}_it:{iteration}_{data_type}_Acc:{avg_accuracy}.csv"
+    save_path = f"{opt_data_path}Logits/{model_name}/Logits_{data_name}{model_name}_{setting}_it:{iteration}_{data_type}_Acc:{avg_accuracy}.csv"
     opt_df.to_csv(save_path)
 
     return opt_df
@@ -325,7 +325,7 @@ def train_model(model, optimizer\
         print("")
         print(f"  Average training Accuracy {model_name}: {avg_train_accuracy:.4f}")
         print(f"  Average training loss {model_name}: {avg_train_loss:.2f}")
-        print("  Training epcoh took: {:}".format(training_time))
+        print("  Training epoch took: {:}".format(training_time))
 
         # ========================================
         #               Validation
@@ -451,7 +451,7 @@ def train_model(model, optimizer\
                 'epoch': epoch_i + 1,
                 f'Training Loss': avg_train_loss,
                 f'Valid. Loss': avg_val_loss,
-                f'Test. Loss': avg_test_loss,
+                f'Test Loss': avg_test_loss,
                 f'Training Accur.': avg_train_accuracy,
                 f'Valid. Accur.': avg_val_accuracy,
                 f'Test Accur.': avg_test_accuracy,
@@ -472,7 +472,7 @@ def train_model(model, optimizer\
     val_acc   = df_stats["Valid. Accur."].values[-1]#.max()
     data_name = pre_training_name + "_" if pre_training \
             else f"OPT_{pre_training_name+'_' if pre_training_name else ''}"
-    hist_fn = f"{histories_path}/{data_name}{model_name}_{setting}_it:{iteration}_ValAcc:{val_acc}.csv"
+    hist_fn = f"{histories_path}{data_name}{model_name}_{setting}_it:{iteration}_ValAcc:{val_acc}.csv"
     df_stats.to_csv(hist_fn)
     print(f"\nTraining stats saved at: {hist_fn}.")
 

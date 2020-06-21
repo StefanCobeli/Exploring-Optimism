@@ -227,10 +227,10 @@ if __name__ == '__main__':
                     , model_name=MODEL_NAME\
                       , pre_training_name=PRE_TRAINING_NAME\
                     , pre_training=True  \
-                    , histories_path="." \
+                    , histories_path=HISTORIES_PATH \
                     , weight_decay=False)
 
-        model_save_path = f"../../models/{MODEL_NAME}_pre-trained_{PRE_TRAINING_NAME}"
+        model_save_path = f"../models/{MODEL_NAME}_pre-trained_{PRE_TRAINING_NAME}"
         print("\nPre-training on %s procedure finished!" %PRE_TRAINING_NAME)
         #Change here the final layer depending on the model:
         model = change_model_top_layer(model, MODEL_NAME)
@@ -240,16 +240,18 @@ if __name__ == '__main__':
 
     else:
         print("\nNo pretraining was performed!")
-        model_save_path = f"../../models/{MODEL_NAME}_untrained"
-        torch.save(model.state_dict(), f"../../models/{MODEL_NAME}_untrained")
+        model_save_path = f"../models/{MODEL_NAME}_untrained"
+        torch.save(model.state_dict(), f"../models/{MODEL_NAME}_untrained")
 
-
+    mean_test_accuracies = 0
+    mean_val_accuracies  = 0
+    
     for i, rs in enumerate(RANDOM_SEED):
         iteration_name=f"{i+1}of{len(RANDOM_SEED)}"
         #reload model to initial values:
-        print("##############################")
-        print(f"### Run {iteration_name}, using random seed {rs}:")
-        print("##############################")
+        print("#######################################")
+        print(f"### Run {iteration_name}, using random seed {rs}:###")
+        print("#######################################")
 
         setting_name = "set1M1" if SETTING_1M1 else "set0"
         model.load_state_dict(torch.load(model_save_path))
@@ -265,10 +267,13 @@ if __name__ == '__main__':
                     , model_name=MODEL_NAME\
                       , pre_training_name=PRE_TRAINING_NAME\
                     , pre_training=False  \
-                    , histories_path="." \
+                    , histories_path=HISTORIES_PATH \
                     , iteration=iteration_name \
                     , weight_decay=False
                         , setting=setting_name)
+        
+        mean_val_accuracies  += (1/len(RANDOM_SEED)) * df_stats['Valid. Accur.'].values[-1]
+        mean_test_accuracies += (1/len(RANDOM_SEED)) * df_stats['Test Accur.'].values[-1]
 
         opt_df_train = pd.read_csv(OPT_PATH + f"optimism_{setting_name}_train.csv")
         opt_df_test  = pd.read_csv(OPT_PATH + f"optimism_{setting_name}_test.csv")
@@ -289,20 +294,6 @@ if __name__ == '__main__':
                        , data_type="train"
                         , setting=setting_name)
 
-        logits_df_test   = retrieve_logits(model        = model            \
-                    , opt_df     = opt_df_test     \
-                    , dataloader = dataloader_test \
-                    , input_ids  = input_ids_test  \
-                    , sentences  = sentences_test  \
-                    , labels     = labels_test     \
-                    , model_name = MODEL_NAME\
-                    , batch_size = BATCH_SIZE\
-                    , opt_data_path=OPT_PATH\
-                    , pre_training_name=PRE_TRAINING_NAME\
-                    , iteration=iteration_name
-                      , data_type="test"
-                        , setting=setting_name)
-
         logits_df_val   = retrieve_logits(model        = model            \
                 , opt_df     = opt_df_val     \
                 , dataloader = dataloader_validation \
@@ -316,3 +307,23 @@ if __name__ == '__main__':
                 , iteration=iteration_name
                      , data_type="val"
                         , setting=setting_name)
+        
+        logits_df_test   = retrieve_logits(model        = model            \
+                    , opt_df     = opt_df_test     \
+                    , dataloader = dataloader_test \
+                    , input_ids  = input_ids_test  \
+                    , sentences  = sentences_test  \
+                    , labels     = labels_test     \
+                    , model_name = MODEL_NAME\
+                    , batch_size = BATCH_SIZE\
+                    , opt_data_path=OPT_PATH\
+                    , pre_training_name=PRE_TRAINING_NAME\
+                    , iteration=iteration_name
+                      , data_type="test"
+                        , setting=setting_name)
+    print("############################################################")
+    print("###################FINAL STATS:#############################")
+    print("############################################################")
+    print(f"Obtained mean accuracies over the {len(RANDOM_SEED)} runs:")
+    print("Mean Validation Accuracy:", mean_val_accuracies)
+    print("Mean Test Accuracy:", mean_test_accuracies)
