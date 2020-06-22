@@ -46,11 +46,12 @@ if __name__ == '__main__':
     DATA_STORE     = config.get('Paths', 'DATA_STORE')
     LOGGING_PATH   = config.get('Paths', 'LOGGING_PATH')
 
-    BATCH_SIZE   = config.getint('Training', 'BATCH_SIZE')
-    PRE_TRAINING = config.getboolean('Training', 'PRE_TRAINING')
-    SETTING_1M1  = config.getboolean('Training', 'SETTING_1M1')
-    MODEL_NAME   = config.get('Training', 'MODEL_NAME')#roberta-base
-    NUM_EPOCHS   = config.getint('Training', 'NUM_EPOCHS')
+    BATCH_SIZE     = config.getint('Training', 'BATCH_SIZE')
+    BATCH_SIZE_PT  = config.getint('Training', 'BATCH_SIZE_PT')
+    PRE_TRAINING   = config.getboolean('Training', 'PRE_TRAINING')
+    SETTING_1M1    = config.getboolean('Training', 'SETTING_1M1')
+    MODEL_NAME     = config.get('Training', 'MODEL_NAME')#roberta-base
+    NUM_EPOCHS     = config.getint('Training', 'NUM_EPOCHS')
 
     #Project pipeline:
     if LOGGING_PATH:
@@ -165,7 +166,7 @@ if __name__ == '__main__':
                        input_ids_pre_train, attention_masks_pre_train, labels_pre_train \
                      , input_ids_pre_test, attention_masks_pre_test, labels_pre_test  \
                      , input_ids_pre_val, attention_masks_pre_val, labels_pre_val     \
-                     , batch_size=128)
+                     , batch_size=BATCH_SIZE_PT)
     dataloader_train, dataloader_test, dataloader_validation = retrieve_dataloaders(\
                        input_ids_train, attention_masks_train, labels_train \
                      , input_ids_test, attention_masks_test, labels_test  \
@@ -212,31 +213,39 @@ if __name__ == '__main__':
 
 
     if PRE_TRAINING:
-        print("\n##############################")
-        print(f"### Pre-training on {PRE_TRAINING_NAME}:")
-        print("##############################")
-        print("\nStarting pre-training procedure on %s..." %PRE_TRAINING_NAME)
-        model, df_stats_pre = train_model(model, optimizer\
-                        , batch_size=128\
-                          #batch_size Should be 128
-                        , dataloader_train=dataloader_pre_train     \
-                        , dataloader_test=dataloader_pre_test\
-                          , dataloader_val=dataloader_pre_validation  \
-                        , num_epochs=1\
-                          , random_seed=16\
-                    , model_name=MODEL_NAME\
-                      , pre_training_name=PRE_TRAINING_NAME\
-                    , pre_training=True  \
-                    , histories_path=HISTORIES_PATH \
-                    , weight_decay=False)
-
         model_save_path = f"../models/{MODEL_NAME}_pre-trained_{PRE_TRAINING_NAME}"
-        print("\nPre-training on %s procedure finished!" %PRE_TRAINING_NAME)
-        #Change here the final layer depending on the model:
-        model = change_model_top_layer(model, MODEL_NAME)
-        if torch.cuda.is_available():
-            model.cuda()
-        torch.save(model.state_dict(), model_save_path)
+        
+        if os.path.isfile(model_save_path):
+            #Change here the final layer depending on the model:
+            model = change_model_top_layer(model, MODEL_NAME)
+            print(f"Found already trained {MODEL_NAME} on {PRE_TRAINING_NAME}.")
+            model.load_state_dict(torch.load(model_save_path))
+            if torch.cuda.is_available():
+                model.cuda()
+            print("Pre-trained weights loaded!")
+        else:
+            print("\n##############################")
+            print(f"### Pre-training on {PRE_TRAINING_NAME}:")
+            print("##############################")
+            print("\nStarting pre-training procedure on %s..." %PRE_TRAINING_NAME)
+            model, df_stats_pre = train_model(model, optimizer\
+                            , batch_size=BATCH_SIZE_PT\
+                            , dataloader_train=dataloader_pre_train     \
+                            , dataloader_test=dataloader_pre_test\
+                              , dataloader_val=dataloader_pre_validation  \
+                            , num_epochs=1\
+                              , random_seed=16\
+                        , model_name=MODEL_NAME\
+                          , pre_training_name=PRE_TRAINING_NAME\
+                        , pre_training=True  \
+                        , histories_path=HISTORIES_PATH \
+                        , weight_decay=False)
+            print("\nPre-training on %s procedure finished!" %PRE_TRAINING_NAME)
+            #Change here the final layer depending on the model:
+            model = change_model_top_layer(model, MODEL_NAME)
+            if torch.cuda.is_available():
+                model.cuda()
+            torch.save(model.state_dict(), model_save_path)
 
     else:
         print("\nNo pretraining was performed!")

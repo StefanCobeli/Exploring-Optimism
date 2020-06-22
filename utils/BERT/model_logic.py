@@ -14,6 +14,9 @@ from tqdm            import tqdm
 # MODEL_NAME = ['albert-base-v2'\
 #               , 'bert-base-uncased', 'bert-large-uncased'\
 #               , 'roberta-base', 'xlnet-base-cased',  ]
+#New:
+#roberta-large-mnli, roberta-large
+
 print("Loaded model_logic module!")
 
 def change_model_top_layer(model, model_name):
@@ -32,6 +35,12 @@ def change_model_top_layer(model, model_name):
                                         , out_features=2)
     if model_name=="roberta-base":
         model.out_proj = torch.nn.Linear(in_features=768\
+                                      , out_features=2)
+    if model_name=="roberta-large":
+        model.out_proj = torch.nn.Linear(in_features=1024\
+                                      , out_features=2)
+    if model_name=="roberta-large-mnli":
+        model.out_proj = torch.nn.Linear(in_features=1024\
                                       , out_features=2)
     if model_name=="xlnet-base-cased":
         model.logits_proj = torch.nn.Linear(in_features=768\
@@ -60,7 +69,7 @@ def pick_model(model_name, num_labels):
             output_attentions = False, # Whether the model returns attentions weights.
             output_hidden_states = False, # Whether the model returns all hidden-states.
         )
-    if model_name == 'roberta-base':
+    if model_name in ('roberta-base', "roberta-large", "roberta-large-mnli"):
         model = RobertaForSequenceClassification.from_pretrained(
             model_name,
             num_labels = num_labels,
@@ -262,7 +271,9 @@ def train_model(model, optimizer\
             if not(torch.cuda.is_available()) and step % 120 == 1:
                 #If there are not many resources, just test for runtime errors:
                 break
-
+            #if pre_training_name=="Sent" and step>=1200:
+                #Enough steps were performed to learn sentiment prediction.
+            #    break
             # Unpack this training batch from our dataloader.
             b_input_ids  = batch[0].to(device)
             b_input_mask = batch[1].to(device)

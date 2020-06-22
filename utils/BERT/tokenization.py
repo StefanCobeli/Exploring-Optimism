@@ -13,6 +13,8 @@ from tqdm import tqdm
 # MODEL_NAME = ['albert-base-v2'\
 #               , 'bert-base-uncased', 'bert-large-uncased'\
 #               , 'roberta-base', 'xlnet-base-cased',  ]
+#New:
+#roberta-large-mnli, roberta-large
 print("Loaded tokenization module!")
 
 def pick_tokenizer(model_name='albert-base-v2'):
@@ -30,6 +32,10 @@ def pick_tokenizer(model_name='albert-base-v2'):
     if model_name == 'bert-large-uncased':
         tokenizer = BertTokenizer.from_pretrained(model_name, do_lower_case=True)
     if model_name == 'roberta-base':
+        tokenizer = RobertaTokenizer.from_pretrained(model_name, do_lower_case=True)
+    if model_name == 'roberta-large':
+        tokenizer = RobertaTokenizer.from_pretrained(model_name, do_lower_case=True)
+    if model_name == 'roberta-large-mnli':
         tokenizer = RobertaTokenizer.from_pretrained(model_name, do_lower_case=True)
     if model_name == 'xlnet-base-cased':
         tokenizer = XLNetTokenizer.from_pretrained(model_name, do_lower_case=True)

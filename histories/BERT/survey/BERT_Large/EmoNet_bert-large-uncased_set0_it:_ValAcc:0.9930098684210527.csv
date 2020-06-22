@@ -1,0 +1,2 @@
+epoch,Training Loss,Valid. Loss,Test Loss,Training Accur.,Valid. Accur.,Test Accur.,Training Time,Validation Time,Test Time
+1,0.11837587760499987,0.005780765909357318,0.006782584995275293,0.965444214876033,0.9930098684210527,0.9921875,0:06:54,0:00:16,0:00:16

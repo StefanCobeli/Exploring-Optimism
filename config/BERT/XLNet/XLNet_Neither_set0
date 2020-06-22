@@ -15,8 +15,9 @@ OPT_PATH       = ../data/optimism-twitter-data/processed/
 SENT_PATH      =
 
 [Training]
-BATCH_SIZE   = 16
-PRE_TRAINING = False
-SETTING_1M1  = False
-MODEL_NAME   = xlnet-base-cased
-NUM_EPOCHS   = 2
+BATCH_SIZE     = 16
+BATCH_SIZE_PT  = 256
+PRE_TRAINING   = False
+SETTING_1M1    = False
+MODEL_NAME     = xlnet-base-cased
+NUM_EPOCHS     = 2
