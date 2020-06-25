@@ -47,8 +47,9 @@ if __name__ == '__main__':
     LOGGING_PATH   = config.get('Paths', 'LOGGING_PATH')
 
     BATCH_SIZE     = config.getint('Training', 'BATCH_SIZE')
-    BATCH_SIZE_PT  = config.getint('Training', 'BATCH_SIZE_PT')
     PRE_TRAINING   = config.getboolean('Training', 'PRE_TRAINING')
+    if PRE_TRAINING:
+        BATCH_SIZE_PT  = config.getint('Training', 'BATCH_SIZE_PT')
     SETTING_1M1    = config.getboolean('Training', 'SETTING_1M1')
     MODEL_NAME     = config.get('Training', 'MODEL_NAME')#roberta-base
     NUM_EPOCHS     = config.getint('Training', 'NUM_EPOCHS')

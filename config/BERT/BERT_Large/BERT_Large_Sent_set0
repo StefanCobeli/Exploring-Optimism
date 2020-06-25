@@ -5,11 +5,11 @@ SAVE_LOGITS    = True
 RANDOM_SEED = [1, 16, 601, 11, 20]
 
 [Paths]
-DATA_STORE     = ../data/pck_objects/ALBERT/
-HISTORIES_PATH = ./histories/BERT/survey/ALBERT/
+DATA_STORE     = ../data/pck_objects/BERT_Large/
+HISTORIES_PATH = ./histories/BERT/survey/BERT_Large/
 EMONET_PATH    =
 HATE_PATH      =
-LOGGING_PATH   = ./logging/BERT_log
+LOGGING_PATH   =
 OPT1M1_PATH    =
 OPT_PATH       = ../data/optimism-twitter-data/processed/
 SENT_PATH      = ../data/Sentiment-Analysis-Dataset/Sentiment Analysis Dataset.csv

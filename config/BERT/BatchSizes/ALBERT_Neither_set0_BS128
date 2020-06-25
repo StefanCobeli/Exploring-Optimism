@@ -1,0 +1,22 @@
+[Misc]
+FREEZE         = False
+SAVE_LOGITS    = True
+# Considered random seeds:
+RANDOM_SEED = [1, 16, 601, 11, 20]
+
+[Paths]
+DATA_STORE     = ../data/pck_objects/ALBERT/
+HISTORIES_PATH = ./histories/BERT/survey/BatchSizes/
+EMONET_PATH    = 
+HATE_PATH      =
+LOGGING_PATH   =
+OPT1M1_PATH    =
+OPT_PATH       = ../data/optimism-twitter-data/processed/
+SENT_PATH      =
+
+[Training]
+BATCH_SIZE   = 128
+PRE_TRAINING = False
+SETTING_1M1  = False
+MODEL_NAME   = albert-base-v2
+NUM_EPOCHS   = 3
