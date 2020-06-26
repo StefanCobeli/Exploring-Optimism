@@ -1,0 +1,23 @@
+[Misc]
+FREEZE         = False
+SAVE_LOGITS    = True
+# Considered random seeds:
+RANDOM_SEED = [1, 16, 601, 11, 20]
+
+[Paths]
+DATA_STORE     = ../data/pck_objects/BERT_Large/
+HISTORIES_PATH = ./histories/BERT/survey/1M1/
+EMONET_PATH    = ../data/EmoNet/Emonet.tsv
+HATE_PATH      =
+LOGGING_PATH   = 
+OPT1M1_PATH    =
+OPT_PATH       = ../data/optimism-twitter-data/processed/
+SENT_PATH      =
+
+[Training]
+BATCH_SIZE    = 16
+BATCH_SIZE_PT = 64
+PRE_TRAINING  = True
+SETTING_1M1   = True
+MODEL_NAME    = bert-large-uncased
+NUM_EPOCHS    = 2
