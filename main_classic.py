@@ -1,18 +1,19 @@
 import argparse
 import configparser
-from set_project_seed import *
 import sys
 
-from set_project_seed import *
 
-# sys.path.insert(0, './code/')
+sys.path.insert(0, './utils/classic/')
 # sys.path.insert(0, './config/')
 
-from utils.classic.CustomTokenizer  import *
-from utils.classic.data_preparation import *
-from utils.classic.Embedder         import *
-from utils.classic.models           import *
-from utils.classic.training         import *
+from set_project_seed import *
+
+from CustomTokenizer  import *
+from data_preparation import *
+from Embedder         import *
+from models           import *
+from text_classification_with_transformer import *
+from training         import *
 
 from shutil           import copyfile
 
